@@ -47,24 +47,6 @@ namespace server.Services
                 throw;
             }
         }
-
-        //public Product Get(string id) =>
-        //    _books.Find<Product>(book => book.Id == id).FirstOrDefault();
-
-        //public Product Create(Product book)
-        //{
-        //    _books.InsertOne(book);
-        //    return book;
-        //}
-
-        //public void Update(string id, Product bookIn) =>
-        //    _books.ReplaceOne(book => book.Id == id, bookIn);
-
-        //public void Remove(Product bookIn) =>
-        //    _books.DeleteOne(book => book.Id == bookIn.Id);
-
-        //public void Remove(string id) =>
-        //    _books.DeleteOne(book => book.Id == id);
     }
 #pragma warning restore CS1591
 }
