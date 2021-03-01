@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>server</name>
+    </assembly>
+    <members>
+        <member name="T:server.Controllers.BookController">
+            <summary>
+            Books controllers.
+            </summary>
+        </member>
+        <member name="M:server.Controllers.BookController.GetBooks">
+            <summary>
+            Get all the books.
+            </summary>
+        </member>
+        <member name="M:server.Controllers.BookController.GetBookById(System.String)">
+            <summary>
+            Get book details.
+            </summary>
+            <param name="id">Pass book ID</param>
+        </member>
+    </members>
+</doc>

@@ -1,12 +1,20 @@
+using System;
+using System.IO;
+using System.Reflection;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+using server.Models;
+using server.Services;
+
 namespace server
 {
+#pragma warning disable CS1591
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -20,10 +28,48 @@ namespace server
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            // Requires using Microsoft.Extensions.Options
+            // Initialize Database(MongoDB)
+            services.Configure<BookStoreDatabaseSettings>(
+                Configuration.GetSection(nameof(BookStoreDatabaseSettings)));
+
+            services.AddSingleton<IBookStoreDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<BookStoreDatabaseSettings>>().Value);
+
+
+            // Initialize SERVICES
+            services.AddSingleton<BookService>();
+
+            // Initialize CONTROLLERS
+            services.AddControllers().AddNewtonsoftJson(options => options.UseMemberCasing());
+
+            // Initialize SWAGGER
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "server", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Book API",
+                    Description = "A simple Book servive",
+                    //  TermsOfService = new Uri("https://example.com/terms"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Naresh",
+                        Email = string.Empty,
+                        Url = new Uri("https://twitter.com/#"),
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Use under LICX",
+                        Url = new Uri("https://example.com/license#"),
+                    }
+                });
+
+                // Set the comments path for the Swagger JSON and UI.
+                // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, "book-server.xml");
+                c.IncludeXmlComments(xmlPath);
+
             });
         }
 
@@ -49,4 +95,5 @@ namespace server
             });
         }
     }
+#pragma warning restore CS1591
 }

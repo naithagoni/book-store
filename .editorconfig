@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CA2200: Rethrow to preserve stack details
+dotnet_diagnostic.CA2200.severity = warning
