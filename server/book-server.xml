@@ -20,5 +20,16 @@
             </summary>
             <param name="id">Pass book ID</param>
         </member>
+        <member name="M:server.Controllers.BookController.CreateBook(server.Models.Book)">
+            <summary>
+            Create a book.
+            </summary>
+        </member>
+        <member name="M:server.Controllers.BookController.UpdateBook(System.String,server.Models.Book)">
+            <summary>
+            Update a book.
+            </summary>
+            <param name="id">Pass book ID</param>
+        </member>
     </members>
 </doc>

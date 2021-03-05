@@ -4,6 +4,7 @@ using MongoDB.Driver;
 using System.Collections.Generic;
 
 using server.Models;
+using System.Threading.Tasks;
 
 namespace server.Services
 {
@@ -33,7 +34,8 @@ namespace server.Services
                 throw;
             }
         }
-        
+
+
         public Book getBookById(string id)
         {
             try
@@ -47,6 +49,40 @@ namespace server.Services
                 throw;
             }
         }
+
+
+        public Book createBook(Book book)
+        {
+            try
+            {
+                _books.InsertOne(book);
+                return book;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Exception: {e}");
+                throw;
+            }
+        }
+
+
+        public Book updateBook(string id, Book book)
+        {
+            try
+            {
+                _books.ReplaceOne(bk => bk.Id == id, book);
+                return book;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Exception: {e}");
+                throw;
+            }
+        }
+
+
     }
 #pragma warning restore CS1591
 }
