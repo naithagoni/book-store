@@ -1,5 +1,6 @@
 ﻿
 using System;
+using MongoDB.Driver;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
@@ -37,12 +38,11 @@ namespace server.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, "The origin server did not find.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "The server encountered an unexpected condition.")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, "The server is currently unable to handle the request.")]
-        public ActionResult<List<Book>> GetBooks()
+        public async Task<ActionResult<List<Book>>> GetBooks()
         {
             try
             {
-                var res = _bookService.getBooks();
-                return Ok(res);
+                return Ok(await _bookService.getBooks());
             }
             catch (Exception e)
             {
@@ -63,15 +63,14 @@ namespace server.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound, "The origin server did not find.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "The server encountered an unexpected condition.")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, "The server is currently unable to handle the request.")]
-        public ActionResult<Book> GetBookById(string id)
+        public async Task<ActionResult<Book>> GetBookById(string id)
         {
 
             if (String.IsNullOrWhiteSpace(id))
                 return Problem($"Book Id is not set!", null, StatusCodes.Status400BadRequest);
             try
             {
-                var res = _bookService.getBookById(id);
-                return Ok(res);
+                return Ok(await _bookService.getBookById(id));
             }
             catch (Exception e)
             {
@@ -85,8 +84,9 @@ namespace server.Controllers
         /// <summary>
         /// Create a book.
         /// </summary>
+        /// <param name="book">Book info</param>
         [HttpPost]
-        [SwaggerResponse(StatusCodes.Status201Created, "Book details are stored", Type = typeof(Book))]
+        [SwaggerResponse(StatusCodes.Status201Created, "Book details are stored!", Type = typeof(Book))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Malformed request.")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "The origin server did not find.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "The server encountered an unexpected condition.")]
@@ -112,13 +112,15 @@ namespace server.Controllers
         /// Update a book.
         /// </summary>
         /// <param name="id">Pass book ID</param>
+        /// <param name="book">Book info</param>
         [HttpPut("{id}")]
-        [SwaggerResponse(StatusCodes.Status201Created, "Book modified", Type = typeof(Book))]
+        //[SwaggerResponse(StatusCodes.Status202Accepted, "Book modified", Type = typeof(ReplaceOneResult))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Book modified")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Malformed request.")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "The origin server did not find.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "The server encountered an unexpected condition.")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, "The server is currently unable to handle the request.")]
-        public ActionResult<Book> UpdateBook(string id, Book book)
+        public async Task<ActionResult<ReplaceOneResult>> UpdateBook(string id, Book book)
         {
 
             if (String.IsNullOrWhiteSpace(id))
@@ -129,7 +131,7 @@ namespace server.Controllers
 
             try
             {
-                return Ok(_bookService.updateBook(id, book));
+                return Ok(await _bookService.updateBook(id, book));
 
             }
             catch (Exception e)
@@ -145,12 +147,12 @@ namespace server.Controllers
         /// </summary>
         /// <param name="id">Pass book ID</param>
         [HttpDelete("{id}")]
-        [SwaggerResponse(StatusCodes.Status201Created, "Book deleted")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Book deleted", Type = typeof(DeleteResult))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Malformed request.")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "The origin server did not find.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "The server encountered an unexpected condition.")]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, "The server is currently unable to handle the request.")]
-        public ActionResult DeleteBook(string id)
+        public async Task<ActionResult<DeleteResult>> DeleteBook(string id)
         {
 
             if (String.IsNullOrWhiteSpace(id))
@@ -158,7 +160,7 @@ namespace server.Controllers
 
             try
             {
-                return Ok(_bookService.deleteBook(id));
+                return Ok(await _bookService.deleteBook(id));
 
             }
             catch (Exception e)

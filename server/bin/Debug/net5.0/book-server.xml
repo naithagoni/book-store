@@ -24,12 +24,14 @@
             <summary>
             Create a book.
             </summary>
+            <param name="book">Book info</param>
         </member>
         <member name="M:server.Controllers.BookController.UpdateBook(System.String,server.Models.Book)">
             <summary>
             Update a book.
             </summary>
             <param name="id">Pass book ID</param>
+            <param name="book">Book info</param>
         </member>
         <member name="M:server.Controllers.BookController.DeleteBook(System.String)">
             <summary>

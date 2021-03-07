@@ -21,12 +21,11 @@ namespace server.Services
             _books = database.GetCollection<Book>(bookSettings.ProductCollectionName);
         }
 
-        public List<Book> getBooks()
+        public async Task<List<Book>> getBooks()
         {
             try
             {
-                var res = _books.Find(book => true);
-                return res.ToList();
+                return (List<Book>)await _books.Find(book => true).ToListAsync();
             }
             catch (Exception e)
             {
@@ -36,12 +35,11 @@ namespace server.Services
         }
 
 
-        public Book getBookById(string id)
+        public async Task<Book> getBookById(string id)
         {
             try
             {
-                var res =  _books.Find<Book>(book => book.Id == id).FirstOrDefault();
-                return res;
+                return (Book)await _books.Find<Book>(book => book.Id == id).FirstOrDefaultAsync();
             }
             catch (Exception e)
             {
@@ -67,11 +65,11 @@ namespace server.Services
         }
 
 
-        public ReplaceOneResult updateBook(string id, Book book)
+        public async Task<ReplaceOneResult> updateBook(string id, Book book)
         {
             try
             {
-               var res = _books.ReplaceOne(bk => bk.Id == id, book);
+               var res = await _books.ReplaceOneAsync(bk => bk.Id == id, book);
                 return res;
 
             }
@@ -84,11 +82,11 @@ namespace server.Services
         
         
         
-        public DeleteResult deleteBook(string id)
+        public async Task<DeleteResult> deleteBook(string id)
         {
             try
             {
-                var res = _books.DeleteOne(book => book.Id == id);
+                var res = await _books.DeleteOneAsync(book => book.Id == id);
                 return res;
 
             }
