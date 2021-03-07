@@ -136,6 +136,35 @@ namespace server.Controllers
             {
                 return Problem($"{e.Message}", null, StatusCodes.Status500InternalServerError);
             }
+        }        
+        
+        
+        
+        /// <summary>
+        /// Delete a book.
+        /// </summary>
+        /// <param name="id">Pass book ID</param>
+        [HttpDelete("{id}")]
+        [SwaggerResponse(StatusCodes.Status201Created, "Book deleted")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Malformed request.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "The origin server did not find.")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "The server encountered an unexpected condition.")]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable, "The server is currently unable to handle the request.")]
+        public ActionResult DeleteBook(string id)
+        {
+
+            if (String.IsNullOrWhiteSpace(id))
+                return Problem($"Book Id is not set!", null, StatusCodes.Status400BadRequest);
+
+            try
+            {
+                return Ok(_bookService.deleteBook(id));
+
+            }
+            catch (Exception e)
+            {
+                return Problem($"{e.Message}", null, StatusCodes.Status500InternalServerError);
+            }
         }
 
 

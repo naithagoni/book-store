@@ -40,7 +40,7 @@ namespace server.Services
         {
             try
             {
-                var res = _books.Find<Book>(book => book.Id == id).FirstOrDefault();
+                var res =  _books.Find<Book>(book => book.Id == id).FirstOrDefault();
                 return res;
             }
             catch (Exception e)
@@ -67,12 +67,29 @@ namespace server.Services
         }
 
 
-        public Book updateBook(string id, Book book)
+        public ReplaceOneResult updateBook(string id, Book book)
         {
             try
             {
-                _books.ReplaceOne(bk => bk.Id == id, book);
-                return book;
+               var res = _books.ReplaceOne(bk => bk.Id == id, book);
+                return res;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Exception: {e}");
+                throw;
+            }
+        }        
+        
+        
+        
+        public DeleteResult deleteBook(string id)
+        {
+            try
+            {
+                var res = _books.DeleteOne(book => book.Id == id);
+                return res;
 
             }
             catch (Exception e)

@@ -31,5 +31,11 @@
             </summary>
             <param name="id">Pass book ID</param>
         </member>
+        <member name="M:server.Controllers.BookController.DeleteBook(System.String)">
+            <summary>
+            Delete a book.
+            </summary>
+            <param name="id">Pass book ID</param>
+        </member>
     </members>
 </doc>
